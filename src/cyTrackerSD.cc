@@ -2,7 +2,7 @@
 #include "G4HCofThisEvent.hh"
 #include "G4Step.hh"
 #include "G4ThreeVector.hh"
-#include "SDManager.hh"
+#include "G4SDManager.hh"
 #include "G4ios.hh"
 
 cyTrackerSD::cyTrackerSD(const G4String& name,

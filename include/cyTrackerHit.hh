@@ -11,7 +11,7 @@ class cyTrackerHit : public G4VHit {
 public:
     cyTrackerHit();
     cyTrackerHit(const cyTrackerHit&);
-    virtual ~refTrackerHit();
+    virtual ~cyTrackerHit();
 
     // operators
     const cyTrackerHit& operator=(const cyTrackerHit&);
@@ -56,8 +56,8 @@ inline void* cyTrackerHit::operator new(size_t) {
     return (void*) cyTrackerHitAllocator->MallocSingle();
 }
 
-inline void cyTrakcerHit::operator delete(void*hit) {
-    cyTrackerHitAllocator->FreeSingle((cyTrakcerHit*) hit);
+inline void cyTrackerHit::operator delete(void*hit) {
+    cyTrackerHitAllocator->FreeSingle((cyTrackerHit*) hit);
 }
 
 #endif

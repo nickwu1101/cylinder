@@ -30,7 +30,7 @@ void cyEventAction::BeginOfEventAction(const G4Event*) {
 void cyEventAction::EndOfEventAction(const G4Event* event) {
     G4int eventID = event->GetEventID();
     if(eventID % 100000 == 0)
-	G4cout << "Now filled evetn " << eventID << G4endl;
+	G4cout << "Now filled event " << eventID << G4endl;
 
     G4HCofThisEvent* hce = event->GetHCofThisEvent();
     if(!hce) {
@@ -57,31 +57,29 @@ void cyEventAction::EndOfEventAction(const G4Event* event) {
 
     for(G4int i = 0; i < n_hitCore; i++) {
 	cyTrackerHit* hit = (*hHCcore)[i];
-	G4double eDep = hit->GetEdep()
-	    totalEcore += eDep;
+	G4double eDep = hit->GetEdep();
+	totalEcore += eDep;
     }
 
     if(n_hitCore > 0) {
 	analysisManager->FillNtupleIColumn(0, eventID);
-
-	if(n_hitCore > 0) {
-	    analysisManager->FillNtupleIColumn(1, n_hitCore);
-	    analysisManager->FillNtupleDColumn(2, totalEcore);
-
-	    for(G4int i = 0; i < n_hitCore; i++) {
-		cyTrackerHit* hit = (*hHCcore)[i];
-		G4double     eDep = hit->GetEdep();
-		G4double     tDep = hit->GetTime();
-		G4ThreeVector pos = hit->GetPos();
-
-		E_HitCore.push_back(eDep);
-		XCore.push_back    (pos.x());
-		YCore.push_back    (pos.y());
-		ZCore.push_back    (pos.z());
-		timeCore.push_back (tDep);
-	    }
+	
+	analysisManager->FillNtupleIColumn(1, n_hitCore);
+	analysisManager->FillNtupleDColumn(2, totalEcore);
+	
+	for(G4int i = 0; i < n_hitCore; i++) {
+	    cyTrackerHit* hit = (*hHCcore)[i];
+	    G4double     eDep = hit->GetEdep();
+	    G4double     tDep = hit->GetTime();
+	    G4ThreeVector pos = hit->GetPos();
+	    
+	    E_HitCore.push_back(eDep);
+	    XCore.push_back    (pos.x());
+	    YCore.push_back    (pos.y());
+	    ZCore.push_back    (pos.z());
+	    timeCore.push_back (tDep);
 	}
-
+	
 	analysisManager->AddNtupleRow(1);
     }
 }

@@ -22,9 +22,9 @@
 
 cyDetectorConstruction::cyDetectorConstruction() :
     G4VUserDetectorConstruction(),
-    coreLV(NULL), middleLV(NULL), shellLV(NULL),
+    coreLV(NULL), middleLV(NULL), shellLV(NULL), vacuum(NULL),
     coreMaterial(NULL), midMaterial(NULL), shellMaterial(NULL),
-    fCheckOverlaps(NULL) {}
+    fCheckOverlaps(true) {}
 
 cyDetectorConstruction::~cyDetectorConstruction() {}
 
@@ -44,22 +44,22 @@ void cyDetectorConstruction::DefineMaterials() {
     G4double vPres = 1.e-19*pascal;
     G4double vTemp = 0.1*kelvin;
 
-    vacuum = new G4Material("Vacuum", 1, 1.008*g/mole, vDens, kStatteGas, vTemp, vPres);
+    vacuum = new G4Material("Vacuum", 1, 1.008*g/mole, vDens, kStateGas, vTemp, vPres);
 }
 
 G4VPhysicalVolume* cyDetectorConstruction::DefineVolumes() {
     G4double worldLength = 1000.*cm;
     G4GeometryManager::GetInstance()->SetWorldMaximumExtent(worldLength);
     
-    G4out << "Computed tolerance = "
-	  << G4GeometryTolerance::GetInstance()->GetSurfaceTolerance()/mm
-	  << " mm" << G4endl;
+    G4cout << "Computed tolerance = "
+	   << G4GeometryTolerance::GetInstance()->GetSurfaceTolerance()/mm
+	   << " mm" << G4endl;
     
     // world box
     G4Box* worldS = new G4Box("world", worldLength/2., worldLength/2., worldLength/2.);
-    G4LogicalVolume* worldLV = new G4LogicalVolume(worlds, vacuum, "World");
-    G4PhysicalVolume* worldPV
-	= new G4PhysicalVolume(
+    G4LogicalVolume* worldLV = new G4LogicalVolume(worldS, vacuum, "World");
+    G4VPhysicalVolume* worldPV
+	= new G4PVPlacement(
 	    0,               // no rotation
 	    G4ThreeVector(), // at (0, 0, 0)
 	    worldLV,         // its logical volume
@@ -69,25 +69,28 @@ G4VPhysicalVolume* cyDetectorConstruction::DefineVolumes() {
 	    0,               // copy number
 	    fCheckOverlaps); // checking overlaps
     G4VisAttributes* worldVisAtt = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0));
+    worldVisAtt->SetVisibility(true);
     worldLV->SetVisAttributes(worldVisAtt);
 
     // core cylinder
-    G4double rcore = 3*inch;
+    G4double rcore = 1.5*inch;
     G4double lcore = 3*inch;
+    G4double start_angle = 0.*deg;
+    G4double end_angle = 360.*deg;
 
-    G4Tubs* coreCylinder = new G4Tubs("Core Cylinder", 0.*inch, rcore, lcore, 0.*deg, 360.*deg);
+    G4Tubs* coreCylinder = new G4Tubs("Core Cylinder", 0.*inch, rcore, lcore/2., start_angle, end_angle);
 
     // middle cylinder
-    G4double rmid = rcore + 0.37*cm;
+    G4double rmid = rcore + 0.185*cm;
     G4double lmid = lcore + 0.37*cm;
 
-    G4Tubs* middleCylinder = new G4Tubs("Middle Cylinder", 0.*cm, rmid, lmid, 0.*deg, 360.*deg);
+    G4Tubs* middleCylinder = new G4Tubs("Middle Cylinder", 0.*cm, rmid, lmid/2., start_angle, end_angle);
 
     // big cylinder
-    G4double rbig = rmid + 0.1*cm;
+    G4double rbig = rmid + 0.05*cm;
     G4double lbig = lmid + 0.1*cm;
 
-    G4Tubs* bigCylinder = new G4Tubs("Shell Cylinder", 0.*cm, rbig, lbig, 0.*deg, 360.*deg);
+    G4Tubs* bigCylinder = new G4Tubs("Shell Cylinder", 0.*cm, rbig, lbig/2., start_angle, end_angle);
 
     // middle layer
     G4SubtractionSolid* midLayer = new G4SubtractionSolid("Middle Layer",
@@ -114,6 +117,7 @@ G4VPhysicalVolume* cyDetectorConstruction::DefineVolumes() {
 		      0,
 		      fCheckOverlaps);
     G4VisAttributes* coreVisAtt = new G4VisAttributes(G4Colour(1.0, 0.0, 0.0));
+    coreVisAtt->SetVisibility(true);
     coreLV->SetVisAttributes(coreVisAtt);
 
     new G4PVPlacement(0,
@@ -125,6 +129,7 @@ G4VPhysicalVolume* cyDetectorConstruction::DefineVolumes() {
 		      0,
 		      fCheckOverlaps);
     G4VisAttributes* midVisAtt = new G4VisAttributes(G4Colour(0.0, 1.0, 0.0));
+    midVisAtt->SetVisibility(true);
     middleLV->SetVisAttributes(midVisAtt);
 
     new G4PVPlacement(0,
@@ -136,6 +141,8 @@ G4VPhysicalVolume* cyDetectorConstruction::DefineVolumes() {
 		      0,
 		      fCheckOverlaps);
     G4VisAttributes* shellVisAtt = new G4VisAttributes(G4Colour(0.0, 0.0, 1.0));
+    shellVisAtt->SetVisibility(true);
+    shellLV->SetVisAttributes(shellVisAtt);
 
     return worldPV;
 }

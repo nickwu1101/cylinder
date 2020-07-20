@@ -8,14 +8,13 @@
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 class G4Material;
-class G4UserLimits;
 
 class cyDetectorConstruction : public G4VUserDetectorConstruction {
 public:
     cyDetectorConstruction();
     virtual ~cyDetectorConstruction();
 
-    virtual G4VPhyscialVolume* Construct();
+    virtual G4VPhysicalVolume* Construct();
     virtual void ConstructSDandField();
 
     // Set methods

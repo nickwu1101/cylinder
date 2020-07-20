@@ -8,7 +8,7 @@
 #include "G4SystemOfUnits.hh"
 #include "g4analysis.hh"
 
-cyRunAction::cyRunAction(cyRunAction* eventAction)
+cyRunAction::cyRunAction(cyEventAction* eventAction)
     : G4UserRunAction(), fEventAction(eventAction) {
     auto analysisManager = G4Analysis::ManagerInstance("root");
 
@@ -57,7 +57,7 @@ cyRunAction::cyRunAction(cyRunAction* eventAction)
 	fNtColId[2] = analysisManager->CreateNtupleDColumn("EtotalCore");
 
 	vector<G4double>& myHitCore = fEventAction->getE_HitCore();
-	G4out << "Number of Hits: " << myHitCore.size() << G4endl;
+	G4cout << "Number of Hits: " << myHitCore.size() << G4endl;
 
 	fNtColId[3] = analysisManager->CreateNtupleDColumn("E_HitCore", fEventAction->getE_HitCore());
 	fNtColId[4] = analysisManager->CreateNtupleDColumn("XCore"    , fEventAction->getXCore());

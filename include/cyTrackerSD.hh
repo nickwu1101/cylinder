@@ -1,7 +1,7 @@
 #ifndef cyTrackerSD_h
 #define cyTrackerSD_h 1
 
-#include "G4SensitiveDetector.hh"
+#include "G4VSensitiveDetector.hh"
 
 #include "cyTrackerHit.hh"
 

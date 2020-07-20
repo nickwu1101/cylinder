@@ -9,7 +9,7 @@
 
 #include "G4UImanager.hh"
 #include "FTFP_BERT.hh"
-#include "G4StepLimiterPhysics.hh"
+#include "G4RadioactiveDecayPhysics.hh"
 
 #include "Randomize.hh"
 
@@ -39,7 +39,8 @@ int main(int argc, char** argv) {
     runManager->SetUserInitialization(new cyDetectorConstruction());
 
     G4VModularPhysicsList* physicsList = new FTFP_BERT;
-    physicsList->RegisterPhysics(new G4StepLimiterPhysics());
+    //physicsList->RegisterPhysics(new G4StepLimiterPhysics());
+    physicsList->RegisterPhysics(new G4RadioactiveDecayPhysics);
     runManager->SetUserInitialization(physicsList);
 
     // Set user action classes

@@ -9,7 +9,7 @@
 
 G4ThreadLocal G4Allocator<cyTrackerHit>* cyTrackerHitAllocator = 0;
 
-cyTrackerHit::cyTrackerHit() : G4Hit(),
+cyTrackerHit::cyTrackerHit() : G4VHit(),
 			       fTrackID(-1),
 			       fChamberNb(-1),
 			       fEdep(0.),
@@ -18,10 +18,10 @@ cyTrackerHit::cyTrackerHit() : G4Hit(),
 cyTrackerHit::~cyTrackerHit() {}
 
 cyTrackerHit::cyTrackerHit(const cyTrackerHit& right) : G4VHit() {
-    fTrackerID = right.fTrackID;
+    fTrackID   = right.fTrackID;
     fChamberNb = right.fChamberNb;
     fEdep      = right.fEdep;
-    fPos       = fight.fPos;
+    fPos       = right.fPos;
 }
 
 const cyTrackerHit& cyTrackerHit::operator=(const cyTrackerHit& right) {
@@ -37,12 +37,12 @@ G4int cyTrackerHit::operator==(const cyTrackerHit& right) const {
     return ( this == &right) ? 1 : 0;
 }
 
-void cyTrakderHit::Draw() {
-    G4VVIsManager* pVVisManager = G4VVisManager::GetConcreteInstance();
+void cyTrackerHit::Draw() {
+    G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
     if(pVVisManager) {
 	G4Circle circle(fPos);
 	circle.SetScreenSize(4.);
-	circle.SetFillStyle(G4Circle:filled);
+	circle.SetFillStyle(G4Circle::filled);
 	G4Colour colour(1., 0., 0.);
 	G4VisAttributes attribs(colour);
 	circle.SetVisAttributes(attribs);
