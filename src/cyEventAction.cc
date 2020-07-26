@@ -29,7 +29,7 @@ void cyEventAction::BeginOfEventAction(const G4Event*) {
 
 void cyEventAction::EndOfEventAction(const G4Event* event) {
     G4int eventID = event->GetEventID();
-    if(eventID % 100000 == 0)
+    if(eventID % 1000 == 0)
 	G4cout << "Now filled event " << eventID << G4endl;
 
     G4HCofThisEvent* hce = event->GetHCofThisEvent();

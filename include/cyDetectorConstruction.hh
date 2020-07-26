@@ -26,11 +26,15 @@ private:
     G4VPhysicalVolume* DefineVolumes();
 
     // data members
+    G4LogicalVolume* airboxLV;
+    G4LogicalVolume* chamLV;
     G4LogicalVolume* coreLV;
     G4LogicalVolume* middleLV;
     G4LogicalVolume* shellLV;
 
     G4Material*      vacuum;
+    G4Material*      air;
+    G4Material*      chamMaterial;
     G4Material*      coreMaterial;
     G4Material*      midMaterial;
     G4Material*      shellMaterial;

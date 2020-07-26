@@ -36,6 +36,8 @@ G4VPhysicalVolume* cyDetectorConstruction::Construct() {
 void cyDetectorConstruction::DefineMaterials() {
     G4NistManager* nistManager = G4NistManager::Instance();
 
+    air = nistManager->FindOrBuildMaterial("G4_AIR");
+    chamMaterial = nistManager->FindOrBuildMaterial("G4_PLEXIGLASS");
     coreMaterial = nistManager->FindOrBuildMaterial("G4_SODIUM_IODIDE");
     midMaterial = nistManager->FindOrBuildMaterial("G4_MAGNESIUM_OXIDE");
     shellMaterial = nistManager->FindOrBuildMaterial("G4_Al");
@@ -109,7 +111,7 @@ G4VPhysicalVolume* cyDetectorConstruction::DefineVolumes() {
 
     // placements
     new G4PVPlacement(0,
-		      G4ThreeVector(),
+		      G4ThreeVector(0.*cm, 0.*cm, lbig/2.),
 		      coreLV,
 		      "core_PV",
 		      worldLV,
@@ -121,7 +123,7 @@ G4VPhysicalVolume* cyDetectorConstruction::DefineVolumes() {
     coreLV->SetVisAttributes(coreVisAtt);
 
     new G4PVPlacement(0,
-		      G4ThreeVector(),
+		      G4ThreeVector(0.*cm, 0.*cm, lbig/2.),
 		      middleLV,
 		      "middle_PV",
 		      worldLV,
@@ -133,7 +135,7 @@ G4VPhysicalVolume* cyDetectorConstruction::DefineVolumes() {
     middleLV->SetVisAttributes(midVisAtt);
 
     new G4PVPlacement(0,
-		      G4ThreeVector(),
+		      G4ThreeVector(0.*cm, 0.*cm, lbig/2.),
 		      shellLV,
 		      "shell_PV",
 		      worldLV,
@@ -143,6 +145,48 @@ G4VPhysicalVolume* cyDetectorConstruction::DefineVolumes() {
     G4VisAttributes* shellVisAtt = new G4VisAttributes(G4Colour(0.0, 0.0, 1.0));
     shellVisAtt->SetVisibility(true);
     shellLV->SetVisAttributes(shellVisAtt);
+
+    if(true) {
+	G4double xin = 8.*cm;
+	G4double yin = 8.*cm;
+	G4double zin = 4.*cm;
+
+	G4Box* innerBox = new G4Box("innerBox", xin/2., yin/2., zin/2.);
+
+	G4double xout = xin + 2.*cm;
+	G4double yout = yin + 2.*cm;
+	G4double zout = zin + 2.*cm;
+
+	G4Box* outerBox = new G4Box("outerBox", xout/2., yout/2., zout/2.);
+
+	G4SubtractionSolid* chamber = new G4SubtractionSolid("chamber",
+							     outerBox,
+							     innerBox);
+
+	airboxLV = new G4LogicalVolume(innerBox, air, "airbox_LV", 0, 0, 0);
+	chamLV = new G4LogicalVolume(chamber, chamMaterial, "cham_LV", 0, 0, 0);
+
+	new G4PVPlacement(0,
+			  G4ThreeVector(0.*cm, 0.*cm, -zout/2.),
+			  airboxLV,
+			  "airbox_PV",
+			  worldLV,
+			  false,
+			  0,
+			  fCheckOverlaps);
+	new G4PVPlacement(0,
+			  G4ThreeVector(0.*cm, 0.*cm, -zout/2.),
+			  chamLV,
+			  "cham_PV",
+			  worldLV,
+			  false,
+			  0,
+			  fCheckOverlaps);
+	G4VisAttributes* airboxVisAtt = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0));
+	G4VisAttributes* chamVisAtt = new G4VisAttributes(G4Colour(1.0, 1.0, 0.0));
+	airboxLV->SetVisAttributes(airboxVisAtt);
+	chamLV->SetVisAttributes(chamVisAtt);
+    }
 
     return worldPV;
 }
