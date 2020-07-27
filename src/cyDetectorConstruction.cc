@@ -122,31 +122,33 @@ G4VPhysicalVolume* cyDetectorConstruction::DefineVolumes() {
     coreVisAtt->SetVisibility(true);
     coreLV->SetVisAttributes(coreVisAtt);
 
-    new G4PVPlacement(0,
-		      G4ThreeVector(0.*cm, 0.*cm, lbig/2.),
-		      middleLV,
-		      "middle_PV",
-		      worldLV,
-		      false,
-		      0,
-		      fCheckOverlaps);
-    G4VisAttributes* midVisAtt = new G4VisAttributes(G4Colour(0.0, 1.0, 0.0));
-    midVisAtt->SetVisibility(true);
-    middleLV->SetVisAttributes(midVisAtt);
+    if(false) {
+	new G4PVPlacement(0,
+			  G4ThreeVector(0.*cm, 0.*cm, lbig/2.),
+			  middleLV,
+			  "middle_PV",
+			  worldLV,
+			  false,
+			  0,
+			  fCheckOverlaps);
+	G4VisAttributes* midVisAtt = new G4VisAttributes(G4Colour(0.0, 1.0, 0.0));
+	midVisAtt->SetVisibility(true);
+	middleLV->SetVisAttributes(midVisAtt);
 
-    new G4PVPlacement(0,
-		      G4ThreeVector(0.*cm, 0.*cm, lbig/2.),
-		      shellLV,
-		      "shell_PV",
-		      worldLV,
-		      false,
-		      0,
-		      fCheckOverlaps);
-    G4VisAttributes* shellVisAtt = new G4VisAttributes(G4Colour(0.0, 0.0, 1.0));
-    shellVisAtt->SetVisibility(true);
-    shellLV->SetVisAttributes(shellVisAtt);
+	new G4PVPlacement(0,
+			  G4ThreeVector(0.*cm, 0.*cm, lbig/2.),
+			  shellLV,
+			  "shell_PV",
+			  worldLV,
+			  false,
+			  0,
+			  fCheckOverlaps);
+	G4VisAttributes* shellVisAtt = new G4VisAttributes(G4Colour(0.0, 0.0, 1.0));
+	shellVisAtt->SetVisibility(true);
+	shellLV->SetVisAttributes(shellVisAtt);
+    }
 
-    if(true) {
+    if(false) {
 	G4double xin = 8.*cm;
 	G4double yin = 8.*cm;
 	G4double zin = 4.*cm;

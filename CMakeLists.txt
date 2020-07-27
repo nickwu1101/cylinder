@@ -25,9 +25,13 @@ target_link_libraries(cylinder ${Geant4_LIBRARIES})
 set(REFLECT_SCRIPTS
   init_vis.mac
   gui.mac
+  alpha.mac
+  beta.mac
   chamber.mac
   Co60.mac
   Cs137.mac
+  gamma.mac
+  muon.mac
   Na22.mac
   Rn222.mac
   test.mac
