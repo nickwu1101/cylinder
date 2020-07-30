@@ -65,6 +65,9 @@ cyRunAction::cyRunAction(cyEventAction* eventAction)
 	fNtColId[6] = analysisManager->CreateNtupleDColumn("ZCore"    , fEventAction->getZCore());
 	fNtColId[7] = analysisManager->CreateNtupleDColumn("timeCore" , fEventAction->gettimeCore());
 
+	fNtColId[8] = analysisManager->CreateNtupleIColumn("NhitScinti");
+	fNtColId[9] = analysisManager->CreateNtupleDColumn("EtotalScinti");
+
 	analysisManager->FinishNtuple();
     } else {
 	std::cout << "ERROR ... fEventAction not defined !!!!!" << std::endl;

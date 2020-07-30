@@ -22,8 +22,10 @@
 
 cyDetectorConstruction::cyDetectorConstruction() :
     G4VUserDetectorConstruction(),
-    coreLV(NULL), middleLV(NULL), shellLV(NULL), vacuum(NULL),
-    coreMaterial(NULL), midMaterial(NULL), shellMaterial(NULL),
+    airboxLV(NULL), chamLV(NULL),
+    coreLV(NULL), middleLV(NULL), scintiLV(NULL), shellLV(NULL),
+    vacuum(NULL), air(NULL), chamMaterial(NULL), coreMaterial(NULL),
+    midMaterial(NULL), scintiMaterial(NULL), shellMaterial(NULL),
     fCheckOverlaps(true) {}
 
 cyDetectorConstruction::~cyDetectorConstruction() {}
@@ -40,6 +42,7 @@ void cyDetectorConstruction::DefineMaterials() {
     chamMaterial = nistManager->FindOrBuildMaterial("G4_PLEXIGLASS");
     coreMaterial = nistManager->FindOrBuildMaterial("G4_SODIUM_IODIDE");
     midMaterial = nistManager->FindOrBuildMaterial("G4_MAGNESIUM_OXIDE");
+    scintiMaterial = nistManager->FindOrBuildMaterial("G4_POLYSTYRENE");
     shellMaterial = nistManager->FindOrBuildMaterial("G4_Al");
 
     G4double vDens = 1.e-25*g/cm3;
@@ -122,32 +125,30 @@ G4VPhysicalVolume* cyDetectorConstruction::DefineVolumes() {
     coreVisAtt->SetVisibility(true);
     coreLV->SetVisAttributes(coreVisAtt);
 
-    if(false) {
-	new G4PVPlacement(0,
-			  G4ThreeVector(0.*cm, 0.*cm, lbig/2.),
-			  middleLV,
-			  "middle_PV",
-			  worldLV,
-			  false,
-			  0,
-			  fCheckOverlaps);
-	G4VisAttributes* midVisAtt = new G4VisAttributes(G4Colour(0.0, 1.0, 0.0));
-	midVisAtt->SetVisibility(true);
-	middleLV->SetVisAttributes(midVisAtt);
-
-	new G4PVPlacement(0,
-			  G4ThreeVector(0.*cm, 0.*cm, lbig/2.),
-			  shellLV,
-			  "shell_PV",
-			  worldLV,
-			  false,
-			  0,
-			  fCheckOverlaps);
-	G4VisAttributes* shellVisAtt = new G4VisAttributes(G4Colour(0.0, 0.0, 1.0));
-	shellVisAtt->SetVisibility(true);
-	shellLV->SetVisAttributes(shellVisAtt);
-    }
-
+    new G4PVPlacement(0,
+		      G4ThreeVector(0.*cm, 0.*cm, lbig/2.),
+		      middleLV,
+		      "middle_PV",
+		      worldLV,
+		      false,
+		      0,
+		      fCheckOverlaps);
+    G4VisAttributes* midVisAtt = new G4VisAttributes(G4Colour(0.0, 1.0, 0.0));
+    midVisAtt->SetVisibility(true);
+    middleLV->SetVisAttributes(midVisAtt);
+    
+    new G4PVPlacement(0,
+		      G4ThreeVector(0.*cm, 0.*cm, lbig/2.),
+		      shellLV,
+		      "shell_PV",
+		      worldLV,
+		      false,
+		      0,
+		      fCheckOverlaps);
+    G4VisAttributes* shellVisAtt = new G4VisAttributes(G4Colour(0.0, 0.0, 1.0));
+    shellVisAtt->SetVisibility(true);
+    shellLV->SetVisAttributes(shellVisAtt);
+    
     if(false) {
 	G4double xin = 8.*cm;
 	G4double yin = 8.*cm;
@@ -190,19 +191,46 @@ G4VPhysicalVolume* cyDetectorConstruction::DefineVolumes() {
 	chamLV->SetVisAttributes(chamVisAtt);
     }
 
+    G4double scintiX = 8.*cm;
+    G4double scintiY = 8.*cm;
+    G4double scintiZ = 1.1*cm;
+    
+    G4Box* scintillator = new G4Box("scintillator", scintiX/2., scintiY/2., scintiZ/2.);
+    
+    scintiLV = new G4LogicalVolume(scintillator, scintiMaterial, "scintillator_LV", 0, 0, 0);
+
+    if(true)
+	new G4PVPlacement(0,
+			  G4ThreeVector(0.*cm, 0.*cm, -scintiZ/2.),
+			  scintiLV,
+			  "scintillator_PV",
+			  worldLV,
+			  false,
+			  0,
+			  fCheckOverlaps);
+    
+    G4VisAttributes* scintiVisAtt = new G4VisAttributes(G4Colour(1.0, 1.0, 0.0));
+    scintiLV->SetVisAttributes(scintiVisAtt);
+    
     return worldPV;
 }
 
 void cyDetectorConstruction::ConstructSDandField() {
     // sensitive detectors
     G4String trackerCoreSDName = "cy/TrackerCoreSD";
+    G4String trackerScintiSDName = "cy/TrackerScintiSD";
 
     cyTrackerSD* coreTrackerSD = new cyTrackerSD(trackerCoreSDName,
 						 "TrackerHitsCollectionCore");
+    cyTrackerSD* scintiTrackerSD = new cyTrackerSD(trackerScintiSDName,
+						   "TrackerHitsCollectionScinti");
+    
     G4SDManager::GetSDMpointer()->AddNewDetector(coreTrackerSD);
+    G4SDManager::GetSDMpointer()->AddNewDetector(scintiTrackerSD);
 
     // Setting TrackerSD to all logical volume
     SetSensitiveDetector("core_LV", coreTrackerSD, true);
+    SetSensitiveDetector("scintillator_LV", scintiTrackerSD, true);
 }
 
 void cyDetectorConstruction::SetCheckOverlaps(G4bool checkOverlaps) {

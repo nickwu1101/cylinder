@@ -5,9 +5,9 @@
 
 /gps/source/intensity 1
 /gps/particle ion
-/gps/ion 86 222
+/gps/ion 11 22
 /gps/pos/type Point
-/gps/pos/centre 0. 0. -3. cm
+/gps/pos/centre 0. 0. -1.2 cm
 /gps/ang/type iso
 /gps/energy 0. MeV
 

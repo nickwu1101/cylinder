@@ -30,6 +30,7 @@ private:
     G4LogicalVolume* chamLV;
     G4LogicalVolume* coreLV;
     G4LogicalVolume* middleLV;
+    G4LogicalVolume* scintiLV;
     G4LogicalVolume* shellLV;
 
     G4Material*      vacuum;
@@ -37,6 +38,7 @@ private:
     G4Material*      chamMaterial;
     G4Material*      coreMaterial;
     G4Material*      midMaterial;
+    G4Material*      scintiMaterial;
     G4Material*      shellMaterial;
 
     G4bool           fCheckOverlaps;

@@ -7,10 +7,10 @@
 /gps/particle ion
 /gps/ion 11 22
 /gps/pos/type Point
-/gps/pos/centre 0. 0. -0.1 cm
+/gps/pos/centre 0. 0. -1.2 cm
 /gps/ang/type iso
 /gps/energy 0. MeV
 
 /analysis/setFileName Na22
 
-/run/beamOn 1000000
+/run/beamOn 100000

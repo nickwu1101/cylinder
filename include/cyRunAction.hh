@@ -7,7 +7,7 @@
 class cyEventAction;
 class G4Run;
 
-const G4int MaxNtCol = 8;
+const G4int MaxNtCol = 10;
 
 class cyRunAction : public G4UserRunAction {
 public:
