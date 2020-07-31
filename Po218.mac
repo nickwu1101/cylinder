@@ -1,0 +1,16 @@
+/run/initialize
+
+/tracking/verbose 0
+/hits/verbose 0
+
+/gps/source/intensity 1
+/gps/particle ion
+/gps/ion 84 218
+/gps/pos/type Point
+/gps/pos/centre 0. 0. -0.1 cm
+/gps/ang/type iso
+/gps/energy 0. MeV
+
+/analysis/setFileName Po218
+
+/run/beamOn 1000000

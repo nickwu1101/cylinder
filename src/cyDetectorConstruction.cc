@@ -199,7 +199,7 @@ G4VPhysicalVolume* cyDetectorConstruction::DefineVolumes() {
     
     scintiLV = new G4LogicalVolume(scintillator, scintiMaterial, "scintillator_LV", 0, 0, 0);
 
-    if(true)
+    if(false)
 	new G4PVPlacement(0,
 			  G4ThreeVector(0.*cm, 0.*cm, -scintiZ/2.),
 			  scintiLV,

@@ -27,12 +27,15 @@ set(REFLECT_SCRIPTS
   gui.mac
   alpha.mac
   beta.mac
+  Bi214.mac
   chamber.mac
   Co60.mac
   Cs137.mac
   gamma.mac
   muon.mac
   Na22.mac
+  Pb214.mac
+  Po218.mac
   Rn222.mac
   test.mac
   vis.mac
