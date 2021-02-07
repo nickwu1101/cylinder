@@ -33,6 +33,7 @@ set(REFLECT_SCRIPTS
   Cs137.mac
   gamma.mac
   muon.mac
+  muon1.mac
   Na22.mac
   Pb214.mac
   Po218.mac

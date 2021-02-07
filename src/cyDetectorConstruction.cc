@@ -10,6 +10,7 @@
 #include "G4Tubs.hh"
 
 #include "G4LogicalVolume.hh"
+#include "G4RotationMatrix.hh"
 #include "G4PVPlacement.hh"
 
 #include "G4GeometryTolerance.hh"
@@ -199,9 +200,12 @@ G4VPhysicalVolume* cyDetectorConstruction::DefineVolumes() {
     
     scintiLV = new G4LogicalVolume(scintillator, scintiMaterial, "scintillator_LV", 0, 0, 0);
 
-    if(false)
-	new G4PVPlacement(0,
-			  G4ThreeVector(0.*cm, 0.*cm, -scintiZ/2.),
+    G4RotationMatrix* rotm = new G4RotationMatrix();
+    rotm->rotateX(90*deg);
+
+    if(true)
+	new G4PVPlacement(rotm,
+			  G4ThreeVector(0.*cm, rbig + scintiZ/2. + 3*mm, lbig/2.),
 			  scintiLV,
 			  "scintillator_PV",
 			  worldLV,
