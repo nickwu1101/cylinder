@@ -150,7 +150,7 @@ G4VPhysicalVolume* cyDetectorConstruction::DefineVolumes() {
     shellVisAtt->SetVisibility(true);
     shellLV->SetVisAttributes(shellVisAtt);
     
-    if(false) {
+    if(false) { // ignore this block
 	G4double xin = 8.*cm;
 	G4double yin = 8.*cm;
 	G4double zin = 4.*cm;
