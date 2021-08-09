@@ -80,3 +80,5 @@
 #
 # For file-based drivers, use this to create an empty detector view:
 /vis/viewer/flush
+
+/vis/viewer/set/style surface

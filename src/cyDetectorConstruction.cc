@@ -74,13 +74,13 @@ G4VPhysicalVolume* cyDetectorConstruction::DefineVolumes() {
 	    false,           // no boolean operations
 	    0,               // copy number
 	    fCheckOverlaps); // checking overlaps
-    G4VisAttributes* worldVisAtt = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0));
+    G4VisAttributes* worldVisAtt = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0, 0.));
     worldVisAtt->SetVisibility(true);
     worldLV->SetVisAttributes(worldVisAtt);
 
     // core cylinder
     G4double rcore = 1.5*inch;
-    G4double lcore = 3*inch;
+    G4double lcore = 3.*inch;
     G4double start_angle = 0.*deg;
     G4double end_angle = 360.*deg;
 
@@ -113,42 +113,48 @@ G4VPhysicalVolume* cyDetectorConstruction::DefineVolumes() {
     middleLV = new G4LogicalVolume(midLayer, midMaterial, "middle_LV", 0, 0, 0);
     shellLV = new G4LogicalVolume(shellLayer, shellMaterial, "shell_LV", 0, 0, 0);
 
-    // placements
-    new G4PVPlacement(0,
-		      G4ThreeVector(0.*cm, 0.*cm, lbig/2.),
-		      coreLV,
-		      "core_PV",
-		      worldLV,
-		      false,
-		      0,
-		      fCheckOverlaps);
-    G4VisAttributes* coreVisAtt = new G4VisAttributes(G4Colour(1.0, 0.0, 0.0));
-    coreVisAtt->SetVisibility(true);
-    coreLV->SetVisAttributes(coreVisAtt);
+    G4ThreeVector centerOfCylinder = G4ThreeVector(0.*cm, 0.*cm, 0.*cm);
+    if(true) {
+	// placements
+	new G4PVPlacement(0,
+			  centerOfCylinder,
+			  coreLV,
+			  "core_PV",
+			  worldLV,
+			  false,
+			  0,
+			  fCheckOverlaps);
+	G4VisAttributes* coreVisAtt = new G4VisAttributes(G4Colour(1.0, 0.0, 0.0));
+	coreVisAtt->SetVisibility(true);
+	coreLV->SetVisAttributes(coreVisAtt);
 
-    new G4PVPlacement(0,
-		      G4ThreeVector(0.*cm, 0.*cm, lbig/2.),
-		      middleLV,
-		      "middle_PV",
-		      worldLV,
-		      false,
-		      0,
-		      fCheckOverlaps);
-    G4VisAttributes* midVisAtt = new G4VisAttributes(G4Colour(0.0, 1.0, 0.0));
-    midVisAtt->SetVisibility(true);
-    middleLV->SetVisAttributes(midVisAtt);
-    
-    new G4PVPlacement(0,
-		      G4ThreeVector(0.*cm, 0.*cm, lbig/2.),
-		      shellLV,
-		      "shell_PV",
-		      worldLV,
-		      false,
-		      0,
-		      fCheckOverlaps);
-    G4VisAttributes* shellVisAtt = new G4VisAttributes(G4Colour(0.0, 0.0, 1.0));
-    shellVisAtt->SetVisibility(true);
-    shellLV->SetVisAttributes(shellVisAtt);
+    }
+
+    if(false) {
+	new G4PVPlacement(0,
+			  centerOfCylinder,
+			  middleLV,
+			  "middle_PV",
+			  worldLV,
+			  false,
+			  0,
+			  fCheckOverlaps);
+	G4VisAttributes* midVisAtt = new G4VisAttributes(G4Colour(0.0, 1.0, 0.0));
+	midVisAtt->SetVisibility(true);
+	middleLV->SetVisAttributes(midVisAtt);
+
+	new G4PVPlacement(0,
+			  centerOfCylinder,
+			  shellLV,
+			  "shell_PV",
+			  worldLV,
+			  false,
+			  0,
+			  fCheckOverlaps);
+	G4VisAttributes* shellVisAtt = new G4VisAttributes(G4Colour(0.0, 0.0, 1.0));
+	shellVisAtt->SetVisibility(true);
+	shellLV->SetVisAttributes(shellVisAtt);
+    }
     
     if(false) { // ignore this block
 	G4double xin = 8.*cm;
@@ -170,8 +176,10 @@ G4VPhysicalVolume* cyDetectorConstruction::DefineVolumes() {
 	airboxLV = new G4LogicalVolume(innerBox, air, "airbox_LV", 0, 0, 0);
 	chamLV = new G4LogicalVolume(chamber, chamMaterial, "cham_LV", 0, 0, 0);
 
+	G4ThreeVector centerOfBox = G4ThreeVector(0.*cm, 0.*cm, -zout/2.);
+
 	new G4PVPlacement(0,
-			  G4ThreeVector(0.*cm, 0.*cm, -zout/2.),
+			  centerOfBox,
 			  airboxLV,
 			  "airbox_PV",
 			  worldLV,
@@ -179,7 +187,7 @@ G4VPhysicalVolume* cyDetectorConstruction::DefineVolumes() {
 			  0,
 			  fCheckOverlaps);
 	new G4PVPlacement(0,
-			  G4ThreeVector(0.*cm, 0.*cm, -zout/2.),
+			  centerOfBox,
 			  chamLV,
 			  "cham_PV",
 			  worldLV,
@@ -203,7 +211,7 @@ G4VPhysicalVolume* cyDetectorConstruction::DefineVolumes() {
     G4RotationMatrix* rotm = new G4RotationMatrix();
     rotm->rotateX(90*deg);
 
-    if(true)
+    if(false)
 	new G4PVPlacement(rotm,
 			  G4ThreeVector(0.*cm, rbig + scintiZ/2. + 3*mm, lbig/2.),
 			  scintiLV,
